@@ -67,7 +67,7 @@ exports.login = async (req, res) => {
     }
 
     //emain in db present or not
-    const user = await User.findOne({ email });
+    let user = await User.findOne({ email });
 
     //if not a registered User
     if (!user) {
@@ -98,12 +98,22 @@ exports.login = async (req, res) => {
         httpOnly: true,
       };
 
+      //!With Cookie
       res.cookie("token", token, options).status(200).json({
         success: true,
         token,
         user,
         message: "user Logged in Successfully",
       });
+
+      //!Without Cookie
+      // res.status(200).json({
+      //   success: true,
+      //   token,
+      //   user,
+      //   message: "user Logged in Successfully",
+      // });
+
     } else {
       //Password donot match
       return res.status(403).json({
